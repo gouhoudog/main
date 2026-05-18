@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Links - Yellow Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- 構造を完全に独立させ、重ね順を制御しやすくします -->
+    <!-- 背景の白 -->
+    <div class="opening-white-screen" id="whiteScreen"></div>
+    
+    <!-- 中間の黄色ペンキ -->
+    <div class="paint-curtain" id="paintCurtain"></div>
+    
+    <!-- 最前面のロゴ -->
+    <img src="logo.png" alt="Logo" class="opening-logo" id="openingLogo">
+    </div>
+
+    <div class="paint-curtain" id="paintCurtain"></div>
+
+<!-- （オープニング用の3つの要素（whiteScreen, paintCurtain, openingLogo）のすぐ下に配置します） -->
+    <!-- 【新規追加】最上部の黄色い太い帯（ヘッダー） -->
+    <header class="top-banner">
+        <!-- ここにヘッダー用のアナザーロゴを配置します（例: header-logo.png） -->
+        <img src="header-logo.png" alt="Header Logo" class="header-logo">
+    </header>
+
+
+<!-- メインコンテンツ -->
+    <div class="container">
+        <img src="icon.png" alt="Profile Image" class="profile-img">
+        
+        <!-- メインの名前 -->
+        <h1 class="name">ドッグさん</h1>
+        <!-- 【新規追加】一回り小さい英語名の欄 -->
+        <p class="name-sub">合法小狗</p>
+        
+        <p class="bio">ここに簡単な来歴やメッセージを記入します。<br>背景を白に、ボタンを黒にすることで高級感を出しています。</p>
+
+        <div class="links-wrapper">
+            <a href="https://x.com/" class="link-card" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-x-twitter"></i> X (旧Twitter)
+            </a>
+            <a href="https://discord.gg/" class="link-card" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-discord"></i> Discord
+            </a>
+        </div>
+    </div>
+
+<!-- アニメーションのタイムライン制御 -->
+<script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const whiteScreen = document.getElementById('whiteScreen');
+            const paintCurtain = document.getElementById('paintCurtain');
+            const openingLogo = document.getElementById('openingLogo');
+            
+            // 1. 1.2秒後：ロゴが表示されている状態で、後ろに黄色いペンキが降りてくる
+            setTimeout(() => {
+                paintCurtain.classList.add('slide-down');
+            }, 1200);
+
+            // 2. 2.1秒後：ロゴが完全に消え、ペンキが降りきったら後ろの白画面を消去
+            setTimeout(() => {
+                whiteScreen.classList.add('fade-out');
+            }, 2100);
+
+            // 3. 2.6秒後：一面黄色の状態から、ペンキを上に上げる（メイン画面の出現）
+            setTimeout(() => {
+                paintCurtain.classList.remove('slide-down');
+                paintCurtain.classList.add('slide-up');
+            }, 2600);
+
+            // 4. 4秒後：すべてのオープニング要素を完全に非表示にする
+            setTimeout(() => {
+                paintCurtain.classList.add('hidden');
+                openingLogo.classList.add('hidden'); // ロゴ要素も片付ける
+            }, 4000);
+        });
+    </script>
+</body>
+</html>

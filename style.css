@@ -1,0 +1,381 @@
+/* ==========================================================================
+   1. 外部フォントの登録（CC0ライセンス確認済み：You're Gone）
+   ========================================================================== */
+@font-face {
+    font-family: 'YoureGone'; 
+    /* フォルダ内に保存したフォントファイル名と完全に一致させてください */
+    src: url('Youre Gone.otf') format('opentype'); 
+}
+/* ==========================================================================
+   1. 全体共通の基本設定（最上部にヘッダーを置くためのレイアウト修正）
+   ========================================================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #f8f9fa; 
+    color: #1a1a1a;            
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    
+    /* 【修正】上から下へ要素（ヘッダー → コンテナ）を並べる設定に変更 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* 【新規追加】黄色い太い帯の設定 */
+.top-banner {
+    width: 100%;               /* 画面の横幅いっぱいに広げる */
+    height: 80px;             /* 【ご要望】高さを150pxに設定 */
+    background-color: #f39c12; /* テーマカラーの黄色 */
+    display: flex;
+    justify-content: center;   /* ロゴを横方向の中央に配置 */
+    align-items: center;       /* ロゴを縦方向の中央に配置 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* 下側に薄い影をつけて上品に */
+}
+
+/* 【新規追加】ヘッダーロゴのサイズ設定 */
+.header-logo {
+    height: 25px;              /* 帯の高さ(150px)に合わせて、はみ出さない大きさに調整 */
+    width: auto;               /* 縦横比を維持 */
+    object-fit: contain;
+}
+
+/* メインコンテンツを包む箱 */
+.container {
+    width: 100%;
+    max-width: 480px;
+    text-align: center;
+
+/* 上・右・下・左 の順番で個別に指定する方法です（時計回りと覚えると簡単です） */
+    /* 例：上側だけを 50px にし、下側は 40px を維持する */
+    padding: 70px 20px 40px 20px; 
+}
+
+/* ==========================================================================
+   2. オープニング演出（レイヤー完全独立 ＆ ロゴを最前面に固定）
+   ========================================================================== */
+
+/* 第1レイヤー：最初の白い画面（背景のみを担当） */
+.opening-white-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    z-index: 9997;             /* 一番後ろの背景 */
+    transition: opacity 0.2s ease;
+}
+
+/* 第2レイヤー：斜めカットの黄色いペンキ（中間に配置） */
+.paint-curtain {
+    position: fixed;
+    top: -120%;                
+    left: 0;
+    width: 100%;
+    height: 120%;              
+    background-color: #f39c12; 
+    z-index: 9998;             /* 白画面の前、ロゴの後ろに挟む */
+    clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+    
+    /* 動きのスピード設定（0.8秒） */
+    transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+/* 第3レイヤー：ロゴ（独立して常に最前面に固定） */
+.opening-logo {
+    position: fixed;           /* 画面全体に対して配置 */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* 画面の真中央に固定 */
+    width: 180px;              
+    height: auto;
+    opacity: 0;
+    z-index: 9999;             /* 【重要】ペンキ(9998)よりも大きな数値で最前面を維持 */
+    
+    /* 0.3秒待ってから、1.8秒間でフェードイン・フェードアウト */
+    animation: logoFade 2.3s forwards 0.8s; 
+    pointer-events: none;      /* ロゴがクリックの邪魔をしないようにする設定 */
+}
+
+@keyframes logoFade {
+    0% { opacity: 0; }
+    30% { opacity: 1; }
+    60% { opacity: 1; }        /* この段階で背景に黄色が滑り込んできます */
+    100% { opacity: 0; }       /* 黄色の手前で完全に消え去る */
+}
+
+/* 各アニメーション用クラス（前回同様） */
+.paint-curtain.slide-down {
+    transform: translateY(100%);
+}
+
+.paint-curtain.slide-up {
+    transform: translateY(0%); 
+}
+
+.opening-white-screen.fade-out, .paint-curtain.hidden, .opening-logo.hidden {
+    display: none;
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   3. メインコンテンツ（プロフィール・リンク）
+   ========================================================================== */
+.profile-img {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 16px;
+    border: 2px solid #1a1a1a;
+}
+
+.name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    
+    /* 【修正】下の英語名と一体化させるため、下側の余白を完全にゼロにします */
+    margin-bottom: 0px;       
+    
+    /* 【洗練ポイント】文字自体の持つ上下の不要な隙間を削るため、行の高さをきゅっと縮めます */
+    line-height: 1.2;
+}
+
+/* 英語名のためのデザインルール */
+.name-sub {
+    font-size: 0.95rem;       
+    font-weight: 500;         
+    color: #6c757d;           
+    text-transform: uppercase;
+    letter-spacing: 0.1em;    
+    
+    /* 【修正】上の名前と離れないよう、上側の余白を完全にゼロ（あるいはマイナス）にします */
+    margin-top: 0px;         
+    
+    /* 【修正】下のプロフィール文（bio）との間には、しっかりとした適切な余白を開けます */
+    margin-bottom: 32px;      
+    
+    line-height: 1.2;
+}
+
+.bio {
+    font-size: 0.9rem;
+    color: #6c757d;            /* 読みやすい上品なグレー */
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.links-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* ==========================================================================
+   3. メインコンテンツ（ホバーエフェクト：白線なし・完全黄色変化版）
+   ========================================================================= */
+.link-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px;
+    text-decoration: none;
+    font-weight: 600;
+    border-radius: 6px;
+    
+    /* 左半分(50%)を完全に黄色、右半分(50%)を完全に黒にする綺麗なグラデーション */
+    background: linear-gradient(to right, #f39c12 50%, #1a1a1a 50%);
+    background-size: 200% 100%;
+    
+    /* 【修正の要】通常時は「98%」の位置にセットします。
+       これにより、右側の黒がベースになりつつ、左端に2%分だけ黄色の線が綺麗に見えます。
+       別々の「線」を重ねていないので、隙間の白い線は絶対に発生しません */
+    background-position: 98% bottom;
+    
+    color: #ffffff;            /* 通常時の文字色は白 */
+    position: relative;
+    overflow: hidden;
+    
+    /* 変化のスピード（0.3秒で滑らかに動く） */
+    transition: background-position 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+/* カーソルが乗ったときの動き */
+.link-card:hover {
+    /* 【修正】位置を「0%（一番左）」に移動させることで、
+       左半分に仕込んであった黄色が画面全体を完璧に覆い尽くします（黄色100%になります） */
+    background-position: 0% bottom;
+    
+    /* 背景が完全な黄色になるので、文字色を黒にして読みやすくします */
+    color: #1a1a1a;
+    
+    /* 心地よい立体感を出すためのわずかな拡大 */
+    transform: scale(1.02);
+}
+
+/* ==========================================================================
+   3.5 小見出し（GALLERY）のデザイン設定
+   ========================================================================== */
+.section-title {
+    /* 登録したオリジナルフォントを適用 */
+    font-family: 'YoureGone', sans-serif;
+
+    /* 文字を綺麗に見せるためのサイズ調整 */
+    font-size: 1.6rem;         /* 大きすぎず小さすぎない上品なサイズ */
+    font-weight: 100;          /* 少し太めにして見出しらしさを出す */
+    color: #f39c12;            /* 文字色はメインと同じ黒（または濃いグレー） */
+    text-transform: uppercase; /* 自動で大文字（GALLERY）にする設定 */
+    letter-spacing: 0.1em;    /* 文字の間隔を少し広げて高級感を演出 */
+    
+    /* 位置と余白の調整 */
+    text-align: center;        /* 文字はセンター配置 */
+    margin-top: 35px;          /* 上のボタンとの間の余白 */
+    margin-bottom: 1px;       /* 下のギャラリー（サムネイル）との間の余白 */
+}
+
+/* ==========================================================================
+   4. ギャラリー ＆ モーダル（折り返し対応・3列グリッド版）
+   ========================================================================== */
+
+/* サムネイルを並べる箱 */
+.gallery-wrapper {
+    display: flex;
+    
+    /* 【重要】横幅がいっぱいになったら自動的に次の行へ折り返す設定 */
+    flex-wrap: wrap; 
+    
+    /* 横と縦の画像同士の隙間を 12px に設定 */
+    gap: 12px;                      
+    
+/* 【修正】全体の横幅をボタンより少し狭い「95%」に設定します */
+    width: 95%;
+    
+    /* 【重要】ここがセンター配置の指示になります！
+       「上下の余白（上40px、下0px）」を設定しつつ、「左右の余白を auto（自動計算）」に
+       設定することで、ブラウザが左右の隙間を均等に分けて真ん中に配置してくれます */
+    margin: 25px auto 0; 
+}
+
+/* サムネイルを包む四角いカード */
+.thumb-card {
+    /* 【重要】1列に3枚綺麗に並べるための幅の計算式です
+       【修正】全体の横幅（95%に縮んだ枠）に対して「100%」を基準に3等分計算します。。
+       全体の100%から隙間（12px × 2つ分）を引いたものを、3等分（/ 3）しています */
+    width: calc((100% - 24px) / 3);
+    
+    /* 横幅を固定するため、自動で縮んだり（shrink）伸びたり（grow）させない設定にします */
+    flex: 0 0 auto;
+    aspect-ratio: 1 / 1;            /* 正方形を維持 */
+    overflow: hidden;
+    border-radius: 6px;
+    background-color: #e9ecef;      
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* サムネイル画像自体の設定 */
+.gallery-thumb {
+    width: 100%;
+    height: 100%;
+    /* 【解説】ご自身で正方形に近く切り抜いた画像であれば、
+       この「cover」の設定によって、枠線の中にぴったり隙間なく綺麗に収まります */
+    object-fit: cover;              
+    transition: filter 0.2s ease;
+}
+
+/* サムネイルにマウスを乗せたときの動き */
+.thumb-card:hover {
+    transform: translateY(-2px);    /* ほんの少し上に浮かせる */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+.thumb-card:hover .gallery-thumb {
+    filter: brightness(0.9);        /* 少し暗くして「押せる感」を演出 */
+}
+
+/* 拡大表示時の背景（全画面を覆う半透明の黒マスク） */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85); /* 85%の濃さの黒 */
+    z-index: 10000;                        /* オープニングよりも手前に表示 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;                  /* 通常時はクリックできないようにする */
+    transition: opacity 0.3s ease;
+}
+
+/* JavaScriptでこのクラスがつくと拡大表示がフェードインする */
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;                  /* クリックを有効化 */
+}
+
+/* 拡大された画像本体の設定 */
+.modal-content {
+    max-width: 90%;                        /* 画面の9割を超えないようにする */
+    max-height: 80%;                       /* 画面の8割を超えないようにする */
+    object-fit: contain;                   /* 画像の縦横比を完全に維持して綺麗に収める */
+    border-radius: 4px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    transform: scale(0.95);                /* 開くときに少し小さめの状態から */
+    transition: transform 0.3s ease;
+}
+
+/* 拡大画面が表示されたら画像も100%の大きさにふわっと広がる */
+.modal-overlay.active .modal-content {
+    transform: scale(1);
+}
+
+/* ==========================================================================
+   ギャラリーページ専用：右下固定のトップ戻るボタン
+   ========================================================================== */
+.back-to-top-btn {
+    position: fixed;        /* 画面の特定の位置に完全に固定する命令 */
+    bottom: 30px;           /* 画面の下端から 30px の位置 */
+    right: 30px;            /* 画面の右端から 30px の位置 */
+    width: 50px;            /* ボタンの幅 */
+    height: 50px;           /* ボタンの高さ */
+    background-color: #1a1a1a; /* 高級感のある黒色 */
+    color: #f7d433;         /* あなたのサイトのテーマカラー（鮮やかな黄色） */
+    border-radius: 50%;     /* 正方形を完璧な「丸型」にする魔法の命令 */
+    
+    /* アイコンを丸の真ん中（中央）に配置する設定 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    font-size: 1.2rem;       /* 家マークの大きさ */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* ボタンの後ろに薄い影をつけて立体感を出す */
+    z-index: 999;           /* ギャラリーの画像よりも常に上に重なるようにする設定 */
+    transition: all 0.3s ease; /* マウスを乗せたときのアニメーションを滑らかにする */
+    text-decoration: none;  /* リンクの下線を消す */
+}
+
+/* マウスを乗せたとき（ホバー時）の動き */
+.back-to-top-btn:hover {
+    background-color: #f7d433; /* 背景を黄色に反転 */
+    color: #1a1a1a;            /* アイコンを黒色に反転 */
+    transform: translateY(-5px); /* ボタンが上に 5px ポコッと浮き上がる演出 */
+}
+
+/* ==========================================================================
+   ギャラリーページ専用：見出しの上の余白を狭める設定
+   ========================================================================== */
+.section-title.gallery-page-title {
+    margin-top: -20px; /* 元々48pxあった余白を16pxに狭めます。お好みで数値を微調整してください */
+}

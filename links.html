@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Links - Yellow Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- 構造を完全に独立させ、重ね順を制御しやすくします -->
+    <!-- 背景の白 -->
+    <div class="opening-white-screen" id="whiteScreen"></div>
+    
+    <!-- 中間の黄色ペンキ -->
+    <div class="paint-curtain" id="paintCurtain"></div>
+    
+    <!-- 最前面のロゴ -->
+    <img src="logo.png" alt="Logo" class="opening-logo" id="openingLogo">
+    </div>
+
+    <div class="paint-curtain" id="paintCurtain"></div>
+
+<!-- （オープニング用の3つの要素（whiteScreen, paintCurtain, openingLogo）のすぐ下に配置します） -->
+    <!-- 【新規追加】最上部の黄色い太い帯（ヘッダー） -->
+    <header class="top-banner">
+        <!-- ここにヘッダー用のアナザーロゴを配置します（例: header-logo.png） -->
+        <img src="header-logo.png" alt="Header Logo" class="header-logo">
+    </header>
+
+
+<!-- メインコンテンツ -->
+    <div class="container">
+        <img src="icon.png" alt="Profile Image" class="profile-img">
+        
+        <!-- メインの名前 -->
+        <h1 class="name">ドッグさん</h1>
+        <!-- 【新規追加】一回り小さいname欄 -->
+        <p class="name-sub">合法小狗</p>
+        <!-- bio記入欄 -->
+        <p class="bio">ここに簡単な来歴やメッセージを記入します。<br>背景を白に、ボタンを黒にすることで高級感を出しています。</p>
+
+        <!-- リンクボタン -->
+        <div class="links-wrapper">
+            <a href="https://x.com/" class="link-card" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-x-twitter"></i> X (旧Twitter)
+            </a>
+            <a href="https://discord.gg/" class="link-card" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-discord"></i> Discord
+            </a>
+            <!-- 【新規追加】メール起動ボタン -->
+            <!-- href="mailto:あなたのメールアドレス" と記述します -->
+            <a href="mailto:example@gmail.com" class="link-btn" rel="noopener noreferrer">
+                Contact (Email)
+            </a>
+        </div>
+
+<!-- 【新規追加】小見出し「GALLERY」 -->
+        <h2 class="section-title">SAMPLE FAN-ART</h2>
+
+<!-- 【修正】サムネイル用と拡大表示用で、別の画像ファイルを指定できるようにします -->
+        <div class="gallery-wrapper">
+            
+            <!-- 1枚目の画像設定 -->
+            <!-- openModal('ここには拡大用の大きな画像ファイル名') -->
+            <div class="thumb-card" onclick="openModal('work1.png')">
+                <!-- src="ここにはご自身で切り抜いたサムネイル用の画像ファイル名" -->
+                <img src="work1-s.png" alt="Work 1" class="gallery-thumb">
+            </div>
+            
+            <!-- 2枚目以降の画像設定 -->
+            <div class="thumb-card" onclick="openModal('work2.png')"><img src="work2-s.png" alt="Work 2" class="gallery-thumb"></div>
+            <div class="thumb-card" onclick="openModal('work3.png')"><img src="work3-s.png" alt="Work 3" class="gallery-thumb"></div>
+            <!-- 4～6枚目の画像設定 -->
+            <div class="thumb-card" onclick="openModal('work1.png')"><img src="work1-s.png" alt="Work 1" class="gallery-thumb"></div>
+            <div class="thumb-card" onclick="openModal('work2.png')"><img src="work2-s.png" alt="Work 2" class="gallery-thumb"></div>
+            <div class="thumb-card" onclick="openModal('work3.png')"><img src="work3-s.png" alt="Work 3" class="gallery-thumb"></div>
+            <!-- 7～9枚目の画像設定 -->
+            <div class="thumb-card" onclick="openModal('work1.png')"><img src="work1-s.png" alt="Work 1" class="gallery-thumb"></div>
+            <div class="thumb-card" onclick="openModal('work2.png')"><img src="work2-s.png" alt="Work 2" class="gallery-thumb"></div>
+            <div class="thumb-card" onclick="openModal('work3.png')"><img src="work3-s.png" alt="Work 3" class="gallery-thumb"></div>
+        </div>
+
+    </div> <!-- containerの閉じタグ -->
+
+    <!-- 【新規追加】クリック時に表示される拡大表示用の画面（モーダル） -->
+    <div class="modal-overlay" id="imageModal" onclick="closeModal()">
+        <img src="" alt="Expanded Image" class="modal-content" id="modalImage">
+    </div>
+
+    <!-- アニメーションのタイムライン制御 ＆ モーダル制御 -->
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const whiteScreen = document.getElementById('whiteScreen');
+            const paintCurtain = document.getElementById('paintCurtain');
+            const openingLogo = document.getElementById('openingLogo');
+            
+            // オープニングタイマー（以前の設定通り）
+            setTimeout(() => { paintCurtain.classList.add('slide-down'); }, 1200);
+            setTimeout(() => { whiteScreen.classList.add('fade-out'); }, 2100);
+            setTimeout(() => {
+                paintCurtain.classList.remove('slide-down');
+                paintCurtain.classList.add('slide-up');
+            }, 2600);
+            setTimeout(() => {
+                paintCurtain.classList.add('hidden');
+                openingLogo.classList.add('hidden');
+            }, 3300);
+        });
+
+        // 【新規追加】画像を開く関数
+        function openModal(imageSrc) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            modalImg.src = imageSrc; // クリックされた画像のパスを拡大画面にセット
+            modal.classList.add('active'); // 拡大画面を表示する
+        }
+
+        // 【新規追加】画像を閉じる関数
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('active'); // 拡大画面を非表示にする
+        }
+    </script>
+</body>
+</html>

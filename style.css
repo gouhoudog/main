@@ -18,9 +18,10 @@
 body {
     background-color: #f8f9fa; 
     color: #1a1a1a;            
-    font-family: 'Helvetica Neue', Arial, sans-serif;
     
-    /* 【修正】上から下へ要素（ヘッダー → コンテナ）を並べる設定に変更 */
+    /* 【修正】全体のフォントを "Kosugi" に指定します */
+    font-family: "Zen Maru Gothic", sans-serif;
+    
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -161,8 +162,7 @@ body {
     margin-top: 0px;         
     
     /* 【修正】下のプロフィール文（bio）との間には、しっかりとした適切な余白を開けます */
-    margin-bottom: 32px;      
-    
+    margin-bottom: 15px;      
     line-height: 1.2;
 }
 
@@ -172,16 +172,144 @@ body {
     line-height: 1.6;
     margin-bottom: 30px;
 }
+/* ==========================================================================
+   3.1 新プロフィールエリア（実績・多言語対応）の最適化
+   ========================================================================== */
+.profile-bio-container {
+    width: 100%;
+    margin-bottom: 35px; /* 下の肩書きとの隙間 */
+    text-align: center;
+}
 
+/* 肩書きのスタイル */
+.job-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    letter-spacing: 0.05em;
+    margin-bottom: 15px;
+    margin-top:-7px;
+}
+
+/* 多言語メッセージを包む枠 */
+.lang-message-box {
+    background-color: #ffffff; /* 白背景でスッキリ見せる */
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+}
+
+.lang-text {
+    font-size: 0.85rem;
+    color: #6c757d;
+    line-height: 1.2;
+    margin-bottom: 3px;
+}
+
+/* QQ・WeChatの注意書き（黄色をアクセントに） */
+.lang-attention {
+    font-size: 0.7rem;
+    color: #e67e22; /* 視認性の高い少し濃いめのオレンジゴールド（または #f39c12） */
+    font-weight: 350;
+    line-height: 1.2;
+    margin-top: 6px;
+    padding-top: 1px;
+}
+.lang-attention i {
+    margin-right: 4px;
+}
+
+/* 実績・環境の各セクション */
+.profile-info-section {
+    margin-bottom: 20px;
+}
+
+.info-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+}
+
+.info-text {
+    font-size: 0.85rem;
+    color: #6c757d;
+    line-height: 1.8;
+}
+
+/* 制作環境（アプリ名）をオシャレなタグ風に見せる設定 */
+.info-text-env {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+}
+
+.info-text-env span {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    background-color: #e9ecef; /* グレーの丸四角いタグ */
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+}
+
+
+/* ==========================================================================
+   3. メインコンテンツ（リンクボタン：横一列・3等分レイアウト）
+   ========================================================================== */
 .links-wrapper {
     display: flex;
-    flex-direction: column;
-    gap: 16px;
+    flex-direction: row;       /* 【修正】縦（column）から横（row）に変更 */
+    justify-content: center;   /* 中央に寄せる */
+    gap: 8px;                  /* ボタン同士の間隔を少し狭めてキュッとさせます */
+    width: 100%;
+    margin-bottom: 35px;       /* 下の自己紹介文（肩書き）との間の適切な余白 */
 }
 
 /* ==========================================================================
    3. メインコンテンツ（ホバーエフェクト：白線なし・完全黄色変化版）
    ========================================================================= */
+.link-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* アイコンと文字の間の隙間 */
+    gap: 6px;     
+    /* 横に3つ並べるため、内側の余白を少しスリムに調整 */             
+    padding: 12px 4px;         
+    
+    /* 【重要】1列に3枚綺麗に並べるための幅の計算式 */
+    /* 全体の100%から隙間（8px × 2つ分）を引いたものを、3等分しています */
+    width: calc((100% - 16px) / 3);
+    
+    text-decoration: none;
+    font-weight: 600;
+    /* 3つ並んでも文字がはみ出さないよう少しコンパクトに */
+    font-size: 0.8rem;         
+    border-radius: 6px;
+    
+    /* グラデーションとアニメーションの設定（あなたの美しいエフェクトはそのままです！） */
+    background: linear-gradient(to right, #f39c12 50%, #1a1a1a 50%);
+    background-size: 200% 100%;
+    background-position: 98% bottom;
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+    transition: background-position 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+/* カーソルが乗ったときの動き（そのまま維持） */
+.link-card:hover {
+    background-position: 0% bottom;
+    color: #1a1a1a;
+    transform: scale(1.02);
+}
+
 .link-card {
     display: flex;
     align-items: center;
@@ -221,6 +349,53 @@ body {
     /* 心地よい立体感を出すためのわずかな拡大 */
     transform: scale(1.02);
 }
+
+/* ==========================================================================
+   3.2 アイコンのみのリンク（角丸正方形・ホバーで色反転・浮き上がるアニメ）
+   ========================================================================== */
+.links-wrapper-icon {
+    display: flex;
+    justify-content: center;   /* 3つのボタンを中央にギュッと寄せます */
+    gap: 16px;                 /* ボタン同士の間隔（四角くなったので少し狭めてバランスを取ります） */
+    width: 100%;
+    margin-bottom: 20px;       /* 下の自己紹介文との間の余白 */
+}
+
+.icon-link-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;               /* 正方形の幅 */
+    height: 50px;              /* 正方形の高さ */
+    
+    /* 【新規追加】通常時の設定 */
+    background-color: #ffa920;
+    /* あなたのサイトのテーマカラー（鮮やかな黄色） */ 
+    /* 高級感のあるシックな黒 */
+    color: #ffffff;            
+    /* コロンとした可愛い角丸正方形にする魔法の命令 */
+    border-radius: 12px;       
+    
+    /* 四角形の中に綺麗に収まるアイコンのサイズ */
+    font-size: 1.8rem;         
+    text-decoration: none;
+    
+    /* 浮き上がりと色の変化を滑らかにする設定（0.2秒） */
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                background-color 0.2s ease, 
+                color 0.2s ease;
+}
+
+/* マウスカーソルが乗ったとき（ホバー時）の動き */
+.icon-link-btn:hover {
+    /* 【色反転】背景を黄色に、アイコンを黒色にチェンジします */
+    background-color: #1a1a1a; /* 背景を黄色に */
+    color: #f39c12;            /* アイコンを黒に */
+    
+    /* 【アニメーション】上にピコッと浮き上がる動きはそのまま維持 */
+    transform: translateY(-6px) scale(1.05); 
+}
+
 
 /* ==========================================================================
    3.5 小見出し（GALLERY）のデザイン設定
